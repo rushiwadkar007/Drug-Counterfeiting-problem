@@ -2,7 +2,7 @@ Organizations:
   - &OrdererOrg
     Name: Orderer
     ID: OrdererMSP
-    MSPDir: crypto-config/ordererOrganizations/certification-network.com/msp
+    MSPDir: crypto-config/ordererOrganizations/pharma-network.com/msp
     Policies:
       Readers:
         Type: Signature
@@ -14,46 +14,46 @@ Organizations:
         Type: Signature
         Rule: "OR('OrdererMSP.member')"
 
-  - &iit
-    Name: iitMSP
-    ID: iitMSP
-    MSPDir: crypto-config/peerOrganizations/iit.certification-network.com/msp
+  - &sunpharma
+    Name: sunpharmaMSP
+    ID: sunpharmaMSP
+    MSPDir: crypto-config/peerOrganizations/sunpharma.pharma-network.com/msp
     Policies:
       Readers:
         Type: Signature
-        Rule: "OR('iitMSP.admin', 'iitMSP.peer', 'iitMSP.client')"
+        Rule: "OR('sunpharmaMSP.admin', 'sunpharmaMSP.peer', 'sunpharmaMSP.client')"
       Writers:
         Type: Signature
-        Rule: "OR('iitMSP.admin', 'iitMSP.peer', 'iitMSP.client')"
+        Rule: "OR('sunpharmaMSP.admin', 'sunpharmaMSP.peer', 'sunpharamMSP.client')"
       Admins:
         Type: Signature
-        Rule: "OR('iitMSP.admin', 'iitMSP.peer', 'iitMSP.client')"
+        Rule: "OR('sunpharmaMSP.admin', 'sunpharmaMSP.peer', 'sunpharmaMSP.client')"
     AnchorPeers:
-      - Host: peer0.iit.certification-network.com
+      - Host: peer0.sunpharma.pharma-network.com
         Port: 7051
 
-  - &mhrd
-    Name: mhrdMSP
-    ID: mhrdMSP
-    MSPDir: crypto-config/peerOrganizations/mhrd.certification-network.com/msp
+  - &vgpharma
+    Name: vgpharmaMSP
+    ID: vgpharmaMSP
+    MSPDir: crypto-config/peerOrganizations/vgpharma.pharma-network.com/msp
     Policies:
       Readers:
         Type: Signature
-        Rule: "OR('mhrdMSP.admin', 'mhrdMSP.peer', 'mhrdMSP.client')"
+        Rule: "OR('vgpharmaMSP.admin', 'vgpharmaMSP.peer', 'vgpharmaMSP.client')"
       Writers:
         Type: Signature
-        Rule: "OR('mhrdMSP.admin', 'mhrdMSP.peer', 'mhrdMSP.client')"
+        Rule: "OR('vgpharmaMSP.admin', 'vgpharmaMSP.peer', 'vgpharmaMSP.client')"
       Admins:
         Type: Signature
-        Rule: "OR('mhrdMSP.admin', 'mhrdMSP.peer', 'mhrdMSP.client')"
+        Rule: "OR('vgpharmaMSP.admin', 'vgpharmaMSP.peer', 'vgpharmaMSP.client')"
     AnchorPeers:
-      - Host: peer0.mhrd.certification-network.com
+      - Host: peer0.vgpharma.pharma-network.com
         Port: 9051
 
   - &upgrad
     Name: upgradMSP
     ID: upgradMSP
-    MSPDir: crypto-config/peerOrganizations/upgrad.certification-network.com/msp
+    MSPDir: crypto-config/peerOrganizations/upgrad.pharma-network.com/msp
     Policies:
       Readers:
         Type: Signature
@@ -65,10 +65,44 @@ Organizations:
         Type: Signature
         Rule: "OR('upgradMSP.admin', 'upgradMSP.peer', 'upgradMSP.client')"
     AnchorPeers:
-      - Host: peer0.upgrad.certification-network.com
+      - Host: peer0.upgrad.pharma-network.com
         Port: 11051
 
+  - &fedex
+    Name: fedexMSP
+    ID: fedexMSP
+    MSPDir: crypto-config/peerOrganizations/fedex.pharma-network.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('fedexMSP.admin', 'fedexMSP.peer', 'fedexMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('fedexMSP.admin', 'fedexMSP.peer', 'fedexMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('fedexMSP.admin', 'fedexMSP.peer', 'fedexMSP.client')"
+    AnchorPeers:
+        - Host: peer0.fedex.pharma-network.com
+          Port: 13051
 
+  - &pioneeratlantic
+    Name: pioneeratlanticMSP
+    ID: pioneeratlanticMSP
+    MSPDir: crypto-config/peerOrganizations/pioneeratlantic.pharma-network.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('pioneeratlanticMSP.admin', 'pioneeratlanticMSP.peer', 'pioneeratlanticMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('pioneeratlanticMSP.admin', 'pioneeratlanticMSP.peer', 'pioneeratlanticMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('pioneeratlanticMSP.admin', 'pioneeratlanticMSP.peer', 'pioneeratlanticMSP.client')"
+    AnchorPeers:
+        - Host: peer0.pioneeratlantic.pharma-network.com
+          Port: 15051
 
 #Capabilities
 
@@ -106,7 +140,7 @@ Application: &ApplicationDefaults
 Orderer: &OrdererDefaults
   OrdererType: solo
   Addresses:
-    - orderer.certification-network.com:7050
+    - orderer.pharma-network.com:7050
   BatchTimeout: 2s
   BatchSize:
     MaxMessageCount: 10
@@ -147,7 +181,6 @@ Channel: &ChannelDefaults
   Capabilities:
     <<: *ChannelCapabilities
 
-
 #Profiles
 Profiles:
   OrdererGenesis:
@@ -161,19 +194,24 @@ Profiles:
       Capabilities:
         <<: *OrdererCapabilities
     Consortiums:
-      CertificationConsortium:
+      PharmaConsortium:
         Organizations:
-          - *iit
-          - *mhrd
+          - *sunpharma
+          - *vgpharma
           - *upgrad
+          - *fedex
+          - *pioneeratlantic
 
-  CertificationChannel:
-    Consortium: CertificationConsortium
+  PharmaChannel:
+    Consortium: PharmaConsortium
     Application:
       <<: *ApplicationDefaults
       Organizations:
-        - *iit
-        - *mhrd
+        - *sunpharma
+        - *vgpharma
         - *upgrad
+        - *fedex
+        - *pioneeratlantic
       Capabilities:
         <<: *ApplicationCapabilities
+

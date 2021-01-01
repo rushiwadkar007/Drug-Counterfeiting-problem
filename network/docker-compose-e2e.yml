@@ -1,189 +1,233 @@
-version: '2'
-
-volumes:
-  orderer.certification-network.com:
-  peer0.iit.certification-network.com:
-  peer1.iit.certification-network.com:
-  peer0.mhrd.certification-network.com:
-  peer1.mhrd.certification-network.com:
-  peer0.upgrad.certification-network.com:
-  peer1.upgrad.certification-network.com:
-
-networks:
-  certification:
-
-services:
-
-  ca.iit.certification-network.com:
-    image: hyperledger/fabric-ca:latest
-    environment:
-      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca.iit.certification-network.com
-      - FABRIC_CA_SERVER_TLS_ENABLED=false
-      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem
-      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/aa7462aab6f29475e945a2a08284028aa5761f087c6685f36534a60faa6e4f0e_sk
-    ports:
-      - "7054:7054"
-    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/aa7462aab6f29475e945a2a08284028aa5761f087c6685f36534a60faa6e4f0e_sk -b admin:adminpw -d'
-    volumes:
-      - ./crypto-config/peerOrganizations/iit.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
-    container_name: ca.iit.certification-network.com
-    networks:
-      - certification
-
-  ca.mhrd.certification-network.com:
-    image: hyperledger/fabric-ca:latest
-    environment:
-      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca.mhrd.certification-network.com
-      - FABRIC_CA_SERVER_TLS_ENABLED=false
-      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem
-      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/4cf9fa1fccb0129392338a2bb19c11d1c0a78aff5301050306c85f6febc41f35_sk
-    ports:
-      - "8054:7054"
-    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/4cf9fa1fccb0129392338a2bb19c11d1c0a78aff5301050306c85f6febc41f35_sk -b admin:adminpw -d'
-    volumes:
-      - ./crypto-config/peerOrganizations/mhrd.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
-    container_name: ca.mhrd.certification-network.com
-    networks:
-      - certification
-
-  ca.upgrad.certification-network.com:
-    image: hyperledger/fabric-ca:latest
-    environment:
-      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca.upgrad.certification-network.com
-      - FABRIC_CA_SERVER_TLS_ENABLED=false
-      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem
-      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/06fad643e277762f7e6d0068cf7079890c1acf948dbc6a537d34138caf038b32_sk
-    ports:
-      - "9054:7054"
-    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/06fad643e277762f7e6d0068cf7079890c1acf948dbc6a537d34138caf038b32_sk -b admin:adminpw -d'
-    volumes:
-      - ./crypto-config/peerOrganizations/upgrad.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
-    container_name: ca.upgrad.certification-network.com
-    networks:
-      - certification
-
-  orderer.certification-network.com:
-    extends:
-      file:   docker-base/docker-compose-base.yaml
-      service: orderer.certification-network.com
-    container_name: orderer.certification-network.com
-    networks:
-      - certification
-
-  peer0.iit.certification-network.com:
-    container_name: peer0.iit.certification-network.com
-    extends:
-      file:  docker-base/docker-compose-base.yaml
-      service: peer0.iit.certification-network.com
-    networks:
-      - certification
-
-  peer1.iit.certification-network.com:
-    container_name: peer1.iit.certification-network.com
-    extends:
-      file:  docker-base/docker-compose-base.yaml
-      service: peer1.iit.certification-network.com
-    networks:
-      - certification
-
-  peer0.mhrd.certification-network.com:
-    container_name: peer0.mhrd.certification-network.com
-    extends:
-      file:  docker-base/docker-compose-base.yaml
-      service: peer0.mhrd.certification-network.com
-    networks:
-      - certification
-
-  peer1.mhrd.certification-network.com:
-    container_name: peer1.mhrd.certification-network.com
-    extends:
-      file:  docker-base/docker-compose-base.yaml
-      service: peer1.mhrd.certification-network.com
-    networks:
-      - certification
-
-  peer0.upgrad.certification-network.com:
-    container_name: peer0.upgrad.certification-network.com
-    extends:
-      file:  docker-base/docker-compose-base.yaml
-      service: peer0.upgrad.certification-network.com
-    networks:
-      - certification
-
-  peer1.upgrad.certification-network.com:
-    container_name: peer1.upgrad.certification-network.com
-    extends:
-      file:  docker-base/docker-compose-base.yaml
-      service: peer1.upgrad.certification-network.com
-    networks:
-      - certification
-
-  cli:
-    container_name: cli
-    image: hyperledger/fabric-tools:latest
-    tty: true
-    stdin_open: true
-    environment:
-      - GOPATH=/opt/gopath
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - FABRIC_LOGGING_SPEC=INFO
-      - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.iit.certification-network.com:7051
-      - CORE_PEER_LOCALMSPID=iitMSP
-      - CORE_PEER_TLS_ENABLED=false
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/iit.certification-network.com/peers/peer0.iit.certification-network.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/iit.certification-network.com/peers/peer0.iit.certification-network.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/iit.certification-network.com/peers/peer0.iit.certification-network.com/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/iit.certification-network.com/users/Admin@iit.certification-network.com/msp
-    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    command: /bin/bash
-    volumes:
-      - /var/run/:/host/var/run/
-      - ./../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode/
-   #   - ./../chaincode-advanced/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode-advanced/
-      - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
-      - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
-      - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
-    depends_on:
-      - ca.iit.certification-network.com
-      - ca.mhrd.certification-network.com
-      - ca.upgrad.certification-network.com
-      - orderer.certification-network.com
-      - peer0.iit.certification-network.com
-      - peer1.iit.certification-network.com
-      - peer0.mhrd.certification-network.com
-      - peer1.mhrd.certification-network.com
-      - peer0.upgrad.certification-network.com
-      - peer1.upgrad.certification-network.com
-    networks:
-      - certification
-
-  chaincode:
-    container_name: chaincode
-    image: hyperledger/fabric-ccenv:latest
-    tty: true
-    environment:
-      - GOPATH=/opt/gopath
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - FABRIC_LOGGING_SPEC=INFO
-      - CORE_PEER_ID=chaincode
-      - CORE_PEER_ADDRESS=peer0.iit.certification-network.com:7051
-      - CORE_PEER_LOCALMSPID=iitMSP
-      - CORE_PEER_TLS_ENABLED=false
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/crypto/peerOrganizations/iit.certification-network.com/users/Admin@iit.certification-network.com/msp
-      - CORE_TLS_CLIENT_KEY_PATH=/opt/gopath/src/crypto/peerOrganizations/iit.certification-network.com/users/Admin@iit.certification-network.com/tls/client.key
-      - CORE_TLS_CLIENT_CERT_PATH=/opt/gopath/src/crypto/peerOrganizations/iit.certification-network.com/users/Admin@iit.certification-network.com/tls/client.crt
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/crypto/peerOrganizations/iit.certification-network.com/users/Admin@iit.certification-network.com/tls/ca.crt
-    working_dir: /opt/gopath/src/chaincode
-    command: /bin/bash -c 'sleep 6000000'
-    volumes:
-      - /var/run/:/host/var/run/
-      - ./../chaincode:/opt/gopath/src/chaincode
-     # - ./../chaincode-advanced:/opt/gopath/src/chaincode-advanced
-      - ./crypto-config:/opt/gopath/src/crypto
-    networks:
-      - certification
-
+--- 
+  networks: 
+    pharma: ~
+  services: 
+    ca.fedex.pharma-network.com: 
+      command: "sh -c 'fabric-ca-server start -b admin:adminpw -d'"
+      container_name: ca.fedex.pharma-network.com
+      environment: 
+        - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+        - FABRIC_CA_SERVER_CA_NAME=ca.fedex.pharma-network.com
+        - FABRIC_CA_SERVER_TLS_ENABLED=false
+      image: "hyperledger/fabric-ca:latest"
+      networks: 
+        - pharma
+      ports: 
+        - "9054:7054"
+      volumes: 
+        - "./crypto-config/peerOrganizations/fedex.pharma-network.com/ca/:/etc/hyperledger/fabric-ca-server-config"
+    ca.pioneeratlantic.pharma-network.com: 
+      command: "sh -c 'fabric-ca-server start -b admin:adminpw -d'"
+      container_name: ca.pioneeratlantic.pharma-network.com
+      environment: 
+        - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+        - FABRIC_CA_SERVER_CA_NAME=ca.pioneeratlantic.pharma-network.com
+        - FABRIC_CA_SERVER_TLS_ENABLED=false
+      image: "hyperledger/fabric-ca:latest"
+      networks: 
+        - pharma
+      ports: 
+        - "9054:7054"
+      volumes: 
+        - "./crypto-config/peerOrganizations/pioneeratlantic.pharma-network.com/ca/:/etc/hyperledger/fabric-ca-server-config"
+    ca.sunpharma.pharma-network.com: 
+      command: "sh -c 'fabric-ca-server start -b admin:adminpw -d'"
+      container_name: ca.sunpharma.pharma-network.com
+      environment: 
+        - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+        - FABRIC_CA_SERVER_CA_NAME=ca.sunpharma.pharma-network.com
+        - FABRIC_CA_SERVER_TLS_ENABLED=false
+      image: "hyperledger/fabric-ca:latest"
+      networks: 
+        - pharma
+      ports: 
+        - "7054:7054"
+      volumes: 
+        - "./crypto-config/peerOrganizations/sunpharma.pharma-network.com/ca/:/etc/hyperledger/fabric-ca-server-config"
+    ca.upgrad.pharma-network.com: 
+      command: "sh -c 'fabric-ca-server start -b admin:adminpw -d'"
+      container_name: ca.upgrad.pharma-network.com
+      environment: 
+        - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+        - FABRIC_CA_SERVER_CA_NAME=ca.upgrad.pharma-network.com
+        - FABRIC_CA_SERVER_TLS_ENABLED=false
+      image: "hyperledger/fabric-ca:latest"
+      networks: 
+        - pharma
+      ports: 
+        - "9054:7054"
+      volumes: 
+        - "./crypto-config/peerOrganizations/upgrad.pharma-network.com/ca/:/etc/hyperledger/fabric-ca-server-config"
+    ca.vgpharma.pharma-network.com: 
+      command: "sh -c 'fabric-ca-server start -b admin:adminpw -d'"
+      container_name: ca.vgpharma.pharma-network.com
+      environment: 
+        - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+        - FABRIC_CA_SERVER_CA_NAME=ca.vgpharma.pharma-network.com
+        - FABRIC_CA_SERVER_TLS_ENABLED=false
+      image: "hyperledger/fabric-ca:latest"
+      networks: 
+        - pharma
+      ports: 
+        - "8054:7054"
+      volumes: 
+        - "./crypto-config/peerOrganizations/vgpharma.pharma-network.com/ca/:/etc/hyperledger/fabric-ca-server-config"
+    chaincode: 
+      command: "/bin/bash -c 'sleep 6000000'"
+      container_name: chaincode
+      environment: 
+        - GOPATH=/opt/gopath
+        - "CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock"
+        - FABRIC_LOGGING_SPEC=INFO
+        - CORE_PEER_ID=chaincode
+        - "CORE_PEER_ADDRESS=peer0.sunpharma.pharma-network.com:7051"
+        - CORE_PEER_LOCALMSPID=sunpharmaMSP
+        - CORE_PEER_TLS_ENABLED=false
+        - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/crypto/peerOrganizations/sunpharma.pharma-network.com/users/Admin@sunpharma.pharma-network.com/msp
+        - CORE_TLS_CLIENT_KEY_PATH=/opt/gopath/src/crypto/peerOrganizations/sunpharma.pharma-network.com/users/Admin@sunpharma.pharma-network.com/tls/client.key
+        - CORE_TLS_CLIENT_CERT_PATH=/opt/gopath/src/crypto/peerOrganizations/sunpharma.pharma-network.com/users/Admin@sunpharma.pharma-network.com/tls/client.crt
+        - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/crypto/peerOrganizations/sunpharma.pharma-network.com/users/Admin@sunpharma.pharma-network.com/tls/ca.crt
+      image: "hyperledger/fabric-ccenv:latest"
+      networks: 
+        - pharma
+      tty: true
+      volumes: 
+        - "/var/run/:/host/var/run/"
+        - "./../chaincode:/opt/gopath/src/chaincode"
+        - "./crypto-config:/opt/gopath/src/crypto"
+      working_dir: /opt/gopath/src/chaincode
+    cli: 
+      command: /bin/bas
+      container_name: cli
+      depends_on: 
+        - ca.sunpharma.pharma-network.com
+        - ca.vgpharma.pharma-network.com
+        - ca.upgrad.pharma-network.com
+        - ca.fedex.pharma-network.com
+        - ca.pioneeratlantic.pharma-network.com
+        - orderer.pharma-network.com
+        - peer0.sunpharma.pharma-network.com
+        - peer1.sunpharma.pharma-network.com
+        - peer0.vgpharma.pharma-network.com
+        - peer1.vgpharma.pharma-network.com
+        - peer0.upgrad.pharma-network.com
+        - peer1.upgrad.pharma-network.com
+        - peer0.fedex.pharma-network.com
+        - peer1.fedex.pharma-network.com
+        - peer0.pioneeratlantic.pharma-network.com
+        - peer1.pioneeratlantic.pharma-network.com
+      environment: 
+        - GOPATH=/opt/gopath
+        - "CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock"
+        - FABRIC_LOGGING_SPEC=INFO
+        - CORE_PEER_ID=cli
+        - "CORE_PEER_ADDRESS=peer0.sunpharma.pharma-network.com:7051"
+        - CORE_PEER_LOCALMSPID=sunpharmaMSP
+        - CORE_PEER_TLS_ENABLED=false
+        - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/sunpharma.pharma-network.com/peers/peer0.sunpharma.pharma-network.com/tls/server.crt
+        - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/sunpharma.pharma-network.com/peers/peer0.sunpharma.pharma-network.com/tls/server.key
+        - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/sunpharma.pharma-network.com/peers/peer0.sunpharma.pharma-network.com/tls/ca.crt
+        - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/sunpharma.pharma-network.com/users/Admin@sunpharma.pharma-network.com/msp
+      image: "hyperledger/fabric-tools:latest"
+      networks: 
+        - pharma
+      stdin_open: true
+      tty: true
+      volumes: 
+        - "/var/run/:/host/var/run/"
+        - "./../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode/"
+        - "./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/"
+        - "./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/"
+        - "./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts"
+      working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    orderer.pharma-network.com: 
+      container_name: orderer.pharma-network.com
+      extends: 
+        file: docker-base/docker-compose-base.yaml
+        service: orderer.pharma-network.com
+      networks: 
+        - pharma
+    peer0.fedex.pharma-network.com: 
+      container_name: peer0.fedex.pharma-network.com
+      extends: 
+        file: docker-base/docker-compose-base.yaml
+        service: peer0.fedex.pharma-network.com
+      networks: 
+        - pharma
+    peer0.pioneeratlantic.pharma-network.com: 
+      container_name: peer0.pioneeratlantic.pharma-network.com
+      extends: 
+        file: docker-base/docker-compose-base.yaml
+        service: peer0.pioneeratlantic.pharma-network.com
+      networks: 
+        - pharma
+    peer0.sunpharma.pharma-network.com: 
+      container_name: peer0.sunpharma.pharma-network.com
+      extends: 
+        file: docker-base/docker-compose-base.yaml
+        service: peer0.sunpharma.pharma-network.com
+      networks: 
+        - pharma
+    peer0.upgrad.pharma-network.com: 
+      container_name: peer0.upgrad.pharma-network.com
+      extends: 
+        file: docker-base/docker-compose-base.yaml
+        service: peer0.upgrad.pharma-network.com
+      networks: 
+        - pharma
+    peer0.vgpharma.pharma-network.com: 
+      container_name: peer0.vgpharma.pharma-network.com
+      extends: 
+        file: docker-base/docker-compose-base.yaml
+        service: peer0.vgpharma.pharma-network.com
+      networks: 
+        - pharma
+    peer1.fedex.pharma-network.com: 
+      container_name: peer1.fedex.pharma-network.com
+      extends: 
+        file: docker-base/docker-compose-base.yaml
+        service: peer1.fedex.pharma-network.com
+      networks: 
+        - pharma
+    peer1.pioneeratlantic.pharma-network.com: 
+      container_name: peer1.pioneeratlantic.pharma-network.com
+      extends: 
+        file: docker-base/docker-compose-base.yaml
+        service: peer1.pioneearatlantic.pharma-network.com
+      networks: 
+        - pharma
+    peer1.sunpharma.pharma-network.com: 
+      container_name: peer1.sunpharma.pharma-network.com
+      extends: 
+        file: docker-base/docker-compose-base.yaml
+        service: peer1.sunpharma.pharma-network.com
+      networks: 
+        - pharma
+    peer1.upgrad.pharma-network.com: 
+      container_name: peer1.upgrad.pharma-network.com
+      extends: 
+        file: docker-base/docker-compose-base.yaml
+        service: peer1.upgrad.pharma-network.com
+      networks: 
+        - pharma
+    peer1.vgpharma.pharma-network.com: 
+      container_name: peer1.pharma.vgpharma-network.com
+      extends: 
+        file: docker-base/docker-compose-base.yaml
+        service: peer1.vgpharma.pharma-network.com
+      networks: 
+        - pharma
+  version: "2"
+  volumes: 
+    orderer.pharma-network.com: ~
+    peer0.fedex.pharma-network.com: ~
+    peer0.pioneeratlantic.pharma-network.com: ~
+    peer0.sunpharma.pharma-network.com: ~
+    peer0.upgrad.pharma-network.com: ~
+    peer0.vgpharma.pharma-network.com: ~
+    peer1.fedex.pharma-network.com: ~
+    peer1.pioneeratlantic.pharma-network.com: ~
+    peer1.sunpharma.pharma-network.com: ~
+    peer1.upgrad.pharma-network.com: ~
+    peer1.vgpharma.pharma-network.com: ~
+  

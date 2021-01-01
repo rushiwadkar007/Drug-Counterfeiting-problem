@@ -1,25 +1,44 @@
 OrdererOrgs:
   - Name: Orderer
-    Domain: certification-network.com
+    Domain: pharma-network.com
     Specs:
       - Hostname: orderer
+      
 PeerOrgs:
- - Name: iit
-   Domain: iit.certification-network.com
+ - Name: sunpharma
+   Domain: sunpharma.pharma-network.com
    EnableNodeOUs: true
    Template:
       Count: 2
    Users:
       Count: 1
- - Name: mhrd
-   Domain: mhrd.certification-network.com
+
+ - Name: vgpharma
+   Domain: vgpharma.pharma-network.com
    EnableNodeOUs: true
    Template:
       Count: 2
    Users:
       Count: 1
+
  - Name: upgrad
-   Domain: upgrad.certification-network.com
+   Domain: upgrad.pharma-network.com
+   EnableNodeOUs: true
+   Template:
+      Count: 2
+   Users:
+      Count: 1
+
+ - Name: fedex
+   Domain: fedex.pharma-network.com
+   EnableNodeOUs: true
+   Template:
+      Count: 2
+   Users:
+      Count: 1
+
+ - Name: pioneeratlantic
+   Domain: pioneeratlantic.pharma-network.com
    EnableNodeOUs: true
    Template:
       Count: 2

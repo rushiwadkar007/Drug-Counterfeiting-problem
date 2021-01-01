@@ -16,7 +16,7 @@ function printHelp() {
   echo "      - 'install' - install a specific version of chaincode"
   echo "      - 'update' - update chaincode to a new version"
   echo "      - 'generate' - generate required certificates and genesis block"
-  echo "    -c <channel name> - channel name to use (defaults to \"certificationchannel\")"
+  echo "    -c <channel name> - channel name to use (defaults to \"pharmachannel\")"
   echo "    -t <timeout> - CLI timeout duration in seconds (defaults to 20)"
   echo "    -d <delay> - delay duration in seconds (defaults to 20)"
   echo "    -f <docker-compose-file> - specify which docker-compose file use (defaults to docker-compose-e2e.yaml)"
@@ -29,11 +29,11 @@ function printHelp() {
   echo "Typically, one would first generate the required certificates and "
   echo "genesis block, then bring up the network. e.g.:"
   echo
-  echo "	fabricNetwork.sh generate -c certificationchannel"
-  echo "	fabricNetwork up -c certificationchannel -s couchdb"
-  echo "        fabricNetwork up -c certificationchannel -s couchdb -i 1.4.0"
+  echo "	fabricNetwork.sh generate -c pharmachannel"
+  echo "	fabricNetwork up -c pharmachannel -s couchdb"
+  echo "        fabricNetwork up -c pharmachannel -s couchdb -i 1.4.0"
   echo "	fabricNetwork up -l node"
-  echo "	fabricNetwork down -c certificationchannel"
+  echo "	fabricNetwork down -c pharmachannel"
   echo
   echo "Taking all defaults:"
   echo "	fabricNetwork generate"
@@ -108,13 +108,13 @@ function checkPrereqs() {
   for UNSUPPORTED_VERSION in $BLACKLISTED_VERSIONS; do
     echo "$LOCAL_VERSION" | grep -q "$UNSUPPORTED_VERSION"
     if [ $? -eq 0 ]; then
-      echo "ERROR! Local Fabric binary version of $LOCAL_VERSION does not match this newer version of certification-network and is unsupported. Either move to a later version of Fabric or checkout an earlier version of certification-network."
+      echo "ERROR! Local Fabric binary version of $LOCAL_VERSION does not match this newer version of pharma-network and is unsupported. Either move to a later version of Fabric or checkout an earlier version of pharma-network."
       exit 1
     fi
 
     echo "$DOCKER_IMAGE_VERSION" | grep -q "$UNSUPPORTED_VERSION"
     if [ $? -eq 0 ]; then
-      echo "ERROR! Fabric Docker image version of $DOCKER_IMAGE_VERSION does not match this newer version of certification-network and is unsupported. Either move to a later version of Fabric or checkout an earlier version of certification-network."
+      echo "ERROR! Fabric Docker image version of $DOCKER_IMAGE_VERSION does not match this newer version of pharma-network and is unsupported. Either move to a later version of Fabric or checkout an earlier version of pharma-network."
       exit 1
     fi
   done
@@ -176,7 +176,7 @@ function networkDown() {
   if [ "$MODE" != "restart" ]; then
     # Bring down the network, deleting the volumes
     #Delete any ledger backups
-    docker run -v "$PWD":/tmp/certificationchannel --rm hyperledger/fabric-tools:"$IMAGETAG" rm -Rf /tmp/certificationchannel/ledgers-backup
+    docker run -v "$PWD":/tmp/pharmachannel --rm hyperledger/fabric-tools:"$IMAGETAG" rm -Rf /tmp/pharmachannel/ledgers-backup
     #Cleanup the chaincode containers
     clearContainers
     #Cleanup images
@@ -205,18 +205,26 @@ function replacePrivateKey() {
   # The next steps will replace the template's contents with the
   # actual values of the private key file names for the two CAs.
   CURRENT_DIR=$PWD
-  cd crypto-config/peerOrganizations/iit.certification-network.com/ca/ || exit
+  cd crypto-config/peerOrganizations/sunpharma.pharma-network.com/ca/ || exit
   PRIV_KEY=$(ls *_sk)
   cd "$CURRENT_DIR" || exit
-  sed $OPTS "s/IIT_CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yml
-  cd crypto-config/peerOrganizations/mhrd.certification-network.com/ca/ || exit
+  sed $OPTS "s/SUNPHARMA_CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yml
+  cd crypto-config/peerOrganizations/vgpharma.pharma-network.com/ca/ || exit
   PRIV_KEY=$(ls *_sk)
   cd "$CURRENT_DIR" || exit
-  sed $OPTS "s/MHRD_CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yml
-  cd crypto-config/peerOrganizations/upgrad.certification-network.com/ca/ || exit
+  sed $OPTS "s/VGPHARMA_CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yml
+  cd crypto-config/peerOrganizations/upgrad.pharma-network.com/ca/ || exit
   PRIV_KEY=$(ls *_sk)
   cd "$CURRENT_DIR" || exit
   sed $OPTS "s/UPGRAD_CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yml
+  cd crypto-config/peerOrganizations/fedex.pharma-network.com/ca/ || exit
+  PRIV_KEY=$(ls *_sk)
+  cd "$CURRENT_DIR" || exit
+  sed $OPTS "s/FEDEX_CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yml
+  cd crypto-config/peerOrganizations/pioneeratlantic.pharma-network.com/ca/ || exit
+  PRIV_KEY=$(ls *_sk)
+  cd "$CURRENT_DIR" || exit
+  sed $OPTS "s/PIONEERATLANTIC_CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yml
   # If MacOSX, remove the temporary backup of the docker-compose file
   if [ "$ARCH" == "Darwin" ]; then
     rm docker-compose-e2e.ymlt
@@ -264,7 +272,7 @@ function generateChannelArtifacts() {
   # Note: For some unknown reason (at least for now) the block file can't be
   # named orderer.genesis.block or the orderer will fail to launch!
   set -x
-  configtxgen -profile OrdererGenesis -channelID upgrad-sys-channel -outputBlock ./channel-artifacts/genesis.block
+  configtxgen -profile OrdererGenesis -channelID pharma-sys-channel -outputBlock ./channel-artifacts/genesis.block
   res=$?
   set +x
   if [ $res -ne 0 ]; then
@@ -276,7 +284,7 @@ function generateChannelArtifacts() {
   echo "### Generating channel configuration transaction 'channel.tx' ###"
   echo "#################################################################"
   set -x
-  configtxgen -profile CertificationChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID "$CHANNEL_NAME"
+  configtxgen -profile PharmaChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID "$CHANNEL_NAME"
   res=$?
   set +x
   if [ $res -ne 0 ]; then
@@ -286,41 +294,69 @@ function generateChannelArtifacts() {
 
   echo
   echo "#################################################################"
-  echo "#######    Generating anchor peer update for iitMSP   ##########"
+  echo "#######    Generating anchor peer update for sunpharmaMSP   ##########"
   echo "#################################################################"
   set -x
-  configtxgen -profile CertificationChannel -outputAnchorPeersUpdate ./channel-artifacts/iitMSPanchors.tx -channelID "$CHANNEL_NAME" -asOrg iitMSP
+  configtxgen -profile PharmaChannel -outputAnchorPeersUpdate ./channel-artifacts/sunpharmaMSPanchors.tx -channelID "$CHANNEL_NAME" -asOrg sunpharmaMSP
   res=$?
   set +x
   if [ $res -ne 0 ]; then
-    echo "Failed to generate anchor peer update for IIT..."
+    echo "Failed to generate anchor peer update for SUNPHARMA..."
     exit 1
   fi
 
   echo
   echo "#################################################################"
-  echo "#######    Generating anchor peer update for mhrdMSP   ##########"
+  echo "####### Generating anchor peer update for vgpharmaMSP ###########"
   echo "#################################################################"
   set -x
-  configtxgen -profile CertificationChannel -outputAnchorPeersUpdate ./channel-artifacts/mhrdMSPanchors.tx -channelID "$CHANNEL_NAME" -asOrg mhrdMSP
+  configtxgen -profile PharmaChannel -outputAnchorPeersUpdate ./channel-artifacts/vgpharmaMSPanchors.tx -channelID "$CHANNEL_NAME" -asOrg vgpharmaMSP
   res=$?
   set +x
   if [ $res -ne 0 ]; then
-    echo "Failed to generate anchor peer update for MHRD..."
+    echo "Failed to generate anchor peer update for VGPHARMA..."
     exit 1
   fi
   echo
 
   echo
   echo "#################################################################"
-  echo "#######    Generating anchor peer update for upgradMSP   ##########"
+  echo "#######  Generating anchor peer update for upgradMSP ############"
   echo "#################################################################"
   set -x
-  configtxgen -profile CertificationChannel -outputAnchorPeersUpdate ./channel-artifacts/upgradMSPanchors.tx -channelID "$CHANNEL_NAME" -asOrg upgradMSP
+  configtxgen -profile PharmaChannel -outputAnchorPeersUpdate ./channel-artifacts/upgradMSPanchors.tx -channelID "$CHANNEL_NAME" -asOrg upgradMSP
   res=$?
   set +x
   if [ $res -ne 0 ]; then
     echo "Failed to generate anchor peer update for UPGRAD..."
+    exit 1
+  fi
+  echo
+
+  echo
+  echo "#################################################################"
+  echo "########   Generating anchor peer update for fedexMSP  ##########"
+  echo "#################################################################"
+  set -x
+  configtxgen -profile PharmaChannel -outputAnchorPeersUpdate ./channel-artifacts/fedexMSPanchors.tx -channelID "$CHANNEL_NAME" -asOrg fedexMSP
+  res=$?
+  set +x
+  if [ $res -ne 0 ]; then
+    echo "Failed to generate anchor peer update for FEDEX..."
+    exit 1
+  fi
+  echo
+
+  echo
+  echo "############################################################################"
+  echo "#######    Generating anchor peer update for pioneeratlanticMSP#############"
+  echo "############################################################################"
+  set -x
+  configtxgen -profile PharmaChannel -outputAnchorPeersUpdate ./channel-artifacts/pioneeratlanticMSPanchors.tx -channelID "$CHANNEL_NAME" -asOrg pioneeratlanticMSP
+  res=$?
+  set +x
+  if [ $res -ne 0 ]; then
+    echo "Failed to generate anchor peer update for PIONEERATLANTIC..."
     exit 1
   fi
   echo
@@ -333,7 +369,7 @@ CLI_TIMEOUT=15
 # default for delay between commands
 CLI_DELAY=5
 # channel name defaults to "certificationchannel"
-CHANNEL_NAME="certificationchannel"
+CHANNEL_NAME="pharmachannel"
 # version for updating chaincode
 VERSION_NO=1.1
 # type of chaincode to be installed
