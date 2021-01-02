@@ -1,0 +1,20 @@
+{
+  "name": "pharmanet",
+  "version": "1.0.0",
+  "description": "Pharma Network",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "nyc mocha test --recursive",
+    "start-dev": "fabric-chaincode-node start --peer.address peer0.sunpharma.pharma-network.com:7053 --chaincode-id-name pharmanet:1.1",
+    "start": "fabric-chaincode-node start",
+    "mocha": "mocha test --recursive"
+  },
+  "author": "Rushikesh Wadkar",
+  "license": "ISC",
+  "dependencies": {
+    "fabric-contract-api": "^2.2.1",
+    "fabric-shim": "^2.2.1"
+  }
+}
