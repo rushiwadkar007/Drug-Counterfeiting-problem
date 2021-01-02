@@ -17,37 +17,6 @@ networks:
   pharma: ~
 
 services:
-  - ca.sunpharma.pharma-network.com
-
-  - ca.vgpharma.pharma-network.com
-
-  - ca.upgrad.pharma-network.com
-
-  - ca.fedex.pharma-network.com
-
-  - ca.pioneeratlantic.pharma-network.com
-
-  - orderer.pharma-network.com
-
-  - peer0.sunpharma.pharma-network.com
-
-  - peer1.sunpharma.pharma-network.com
-
-  - peer0.vgpharma.pharma-network.com
-
-  - peer1.vgpharma.pharma-network.com
-
-  - peer0.upgrad.pharma-network.com
-
-  - peer1.upgrad.pharma-network.com
-
-  - peer0.fedex.pharma-network.com
-
-  - peer1.fedex.pharma-network.com
-
-  - peer0.pioneeratlantic.pharma-network.com
-  
-  - peer1.pioneeratlantic.pharma-network.com
 
   ca.fedex.pharma-network.com: 
     command: "sh -c 'fabric-ca-server start -b admin:adminpw -d'"
@@ -78,6 +47,7 @@ services:
       - "11054:7054"
     volumes: 
       - "./crypto-config/peerOrganizations/pioneeratlantic.pharma-network.com/ca/:/etc/hyperledger/fabric-ca-server-config"
+      
   ca.sunpharma.pharma-network.com: 
     command: "sh -c 'fabric-ca-server start -b admin:adminpw -d'"
     container_name: ca.sunpharma.pharma-network.com
@@ -196,79 +166,78 @@ services:
   orderer.pharma-network.com: 
     container_name: orderer.pharma-network.com
     extends: 
-    file: docker-base/docker-compose-base.yaml
-    service: orderer.pharma-network.com
+      file: docker-base/docker-compose-base.yaml
+      service: orderer.pharma-network.com
     networks: 
       - pharma
-    peer0.fedex.pharma-network.com: 
-      container_name: peer0.fedex.pharma-network.com
-      extends: 
-        file: docker-base/docker-compose-base.yaml
-        service: peer0.fedex.pharma-network.com
-      networks: 
-        - pharma
-    peer0.pioneeratlantic.pharma-network.com: 
-      container_name: peer0.pioneeratlantic.pharma-network.com
-      extends: 
-        file: docker-base/dockercompose-base.yaml
-        service: peer0.pioneeratlantic.pharma-network.com
-      networks: 
-        - pharma
-    peer0.sunpharma.pharma-network.com: 
-      container_name: peer0.sunpharma.pharma-network.com
-      extends: 
-        file: docker-base/docker-compose-base.yaml
-        service: peer0.sunpharma.pharma-network.com
-      networks: 
-        - pharma
-    peer0.upgrad.pharma-network.com: 
-      container_name: peer0.upgrad.pharma-network.com
-      extends: 
-        file: docker-base/docker-compose-base.yaml
-        service: peer0.upgrad.pharma-network.com
-      networks: 
-        - pharma
-    peer0.vgpharma.pharma-network.com: 
-      container_name: peer0.vgpharma.pharma-network.com
-      extends: 
-        file: docker-base/docker-compose-base.yaml
-        service: peer0.vgpharma.pharma-network.com
-      networks: 
-        - pharma
-    peer1.fedex.pharma-network.com: 
-      container_name: peer1.fedex.pharma-network.com
-      extends: 
-        file: docker-base/docker-compose-base.yaml
-        service: peer1.fedex.pharma-network.com
-      networks: 
-        - pharma
-    peer1.pioneeratlantic.pharma-network.com: 
-      container_name: peer1.pioneeratlantic.pharma-network.com
-      extends: 
-        file: docker-base/docker-compose-base.yaml
-        service: peer1.pioneeratlantic.pharma-network.com
-      networks: 
-        - pharma
-    peer1.sunpharma.pharma-network.com: 
-      container_name: peer1.sunpharma.pharma-network.com
-      extends: 
-        file: docker-base/docker-compose-base.yaml
-        service: peer1.sunpharma.pharma-network.com
-      networks: 
-        - pharma
-    peer1.upgrad.pharma-network.com: 
-      container_name: peer1.upgrad.pharma-network.com
-      extends: 
-        file: docker-base/docker-compose-base.yaml
-        service: peer1.upgrad.pharma-network.com
-      networks: 
-        - pharma
-    peer1.vgpharma.pharma-network.com: 
-      container_name: peer1.vgpharma.pharma-network.com
-      extends: 
-        file: docker-base/docker-compose-base.yaml
-        service: peer1.vgpharma.pharma-network.com
-      networks: 
-        - pharma
+  peer0.fedex.pharma-network.com: 
+    container_name: peer0.fedex.pharma-network.com
+    extends: 
+      file: docker-base/docker-compose-base.yaml
+      service: peer0.fedex.pharma-network.com
+    networks: 
+      - pharma
+  peer0.pioneeratlantic.pharma-network.com: 
+    container_name: peer0.pioneeratlantic.pharma-network.com
+    extends: 
+      file: docker-base/docker-compose-base.yaml
+      service: peer0.pioneeratlantic.pharma-network.com
+    networks: 
+      - pharma
+  peer0.sunpharma.pharma-network.com: 
+    container_name: peer0.sunpharma.pharma-network.com
+    extends: 
+      file: docker-base/docker-compose-base.yaml
+      service: peer0.sunpharma.pharma-network.com
+    networks: 
+      - pharma
+  peer0.upgrad.pharma-network.com: 
+    container_name: peer0.upgrad.pharma-network.com
+    extends: 
+      file: docker-base/docker-compose-base.yaml
+      service: peer0.upgrad.pharma-network.com
+    networks: 
+      - pharma
+  peer0.vgpharma.pharma-network.com: 
+    container_name: peer0.vgpharma.pharma-network.com
+    extends: 
+      file: docker-base/docker-compose-base.yaml
+      service: peer0.vgpharma.pharma-network.com
+    networks: 
+      - pharma
+  peer1.fedex.pharma-network.com: 
+    container_name: peer1.fedex.pharma-network.com
+    extends: 
+      file: docker-base/docker-compose-base.yaml
+      service: peer1.fedex.pharma-network.com
+    networks: 
+      - pharma
+  peer1.pioneeratlantic.pharma-network.com: 
+    container_name: peer1.pioneeratlantic.pharma-network.com
+    extends: 
+      file: docker-base/docker-compose-base.yaml
+      service: peer1.pioneeratlantic.pharma-network.com
+    networks: 
+      - pharma
+  peer1.sunpharma.pharma-network.com: 
+    container_name: peer1.sunpharma.pharma-network.com
+    extends: 
+      file: docker-base/docker-compose-base.yaml
+      service: peer1.sunpharma.pharma-network.com
+    networks: 
+      - pharma
+  peer1.upgrad.pharma-network.com: 
+    container_name: peer1.upgrad.pharma-network.com
+    extends: 
+      file: docker-base/docker-compose-base.yaml
+      service: peer1.upgrad.pharma-network.com
+    networks: 
+      - pharma
+  peer1.vgpharma.pharma-network.com: 
+    container_name: peer1.vgpharma.pharma-network.com
+    extends: 
+      file: docker-base/docker-compose-base.yaml
+      service: peer1.vgpharma.pharma-network.com
+    networks: 
+      - pharma
 
-  

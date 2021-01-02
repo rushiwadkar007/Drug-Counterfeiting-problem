@@ -1,6 +1,22 @@
 --- 
+  version: "2"
+
+  volumes: 
+    orderer.pharma-network.com: ~
+    peer0.fedex.pharma-network.com: ~
+    peer0.pioneeratlantic.pharma-network.com: ~
+    peer0.sunpharma.pharma-network.com: ~
+    peer0.upgrad.pharma-network.com: ~
+    peer0.vgpharma.pharma-network.com: ~
+    peer1.fedex.pharma-network.com: ~
+    peer1.pioneeratlantic.pharma-network.com: ~
+    peer1.sunpharma.pharma-network.com: ~
+    peer1.upgrad.pharma-network.com: ~
+    peer1.vgpharma.pharma-network.com: ~
+
   networks: 
     pharma: ~
+
   services: 
     ca.fedex.pharma-network.com: 
       command: "sh -c 'fabric-ca-server start -b admin:adminpw -d'"
@@ -16,6 +32,7 @@
         - "9054:7054"
       volumes: 
         - "./crypto-config/peerOrganizations/fedex.pharma-network.com/ca/:/etc/hyperledger/fabric-ca-server-config"
+
     ca.pioneeratlantic.pharma-network.com: 
       command: "sh -c 'fabric-ca-server start -b admin:adminpw -d'"
       container_name: ca.pioneeratlantic.pharma-network.com
@@ -30,6 +47,7 @@
         - "9054:7054"
       volumes: 
         - "./crypto-config/peerOrganizations/pioneeratlantic.pharma-network.com/ca/:/etc/hyperledger/fabric-ca-server-config"
+
     ca.sunpharma.pharma-network.com: 
       command: "sh -c 'fabric-ca-server start -b admin:adminpw -d'"
       container_name: ca.sunpharma.pharma-network.com
@@ -44,6 +62,7 @@
         - "7054:7054"
       volumes: 
         - "./crypto-config/peerOrganizations/sunpharma.pharma-network.com/ca/:/etc/hyperledger/fabric-ca-server-config"
+
     ca.upgrad.pharma-network.com: 
       command: "sh -c 'fabric-ca-server start -b admin:adminpw -d'"
       container_name: ca.upgrad.pharma-network.com
@@ -58,6 +77,7 @@
         - "9054:7054"
       volumes: 
         - "./crypto-config/peerOrganizations/upgrad.pharma-network.com/ca/:/etc/hyperledger/fabric-ca-server-config"
+
     ca.vgpharma.pharma-network.com: 
       command: "sh -c 'fabric-ca-server start -b admin:adminpw -d'"
       container_name: ca.vgpharma.pharma-network.com
@@ -72,6 +92,7 @@
         - "8054:7054"
       volumes: 
         - "./crypto-config/peerOrganizations/vgpharma.pharma-network.com/ca/:/etc/hyperledger/fabric-ca-server-config"
+
     chaincode: 
       command: "/bin/bash -c 'sleep 6000000'"
       container_name: chaincode
@@ -96,6 +117,7 @@
         - "./../chaincode:/opt/gopath/src/chaincode"
         - "./crypto-config:/opt/gopath/src/crypto"
       working_dir: /opt/gopath/src/chaincode
+      
     cli: 
       command: /bin/bas
       container_name: cli
@@ -140,6 +162,7 @@
         - "./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/"
         - "./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts"
       working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+
     orderer.pharma-network.com: 
       container_name: orderer.pharma-network.com
       extends: 
@@ -147,6 +170,7 @@
         service: orderer.pharma-network.com
       networks: 
         - pharma
+
     peer0.fedex.pharma-network.com: 
       container_name: peer0.fedex.pharma-network.com
       extends: 
@@ -154,6 +178,7 @@
         service: peer0.fedex.pharma-network.com
       networks: 
         - pharma
+
     peer0.pioneeratlantic.pharma-network.com: 
       container_name: peer0.pioneeratlantic.pharma-network.com
       extends: 
@@ -161,6 +186,7 @@
         service: peer0.pioneeratlantic.pharma-network.com
       networks: 
         - pharma
+
     peer0.sunpharma.pharma-network.com: 
       container_name: peer0.sunpharma.pharma-network.com
       extends: 
@@ -168,6 +194,7 @@
         service: peer0.sunpharma.pharma-network.com
       networks: 
         - pharma
+
     peer0.upgrad.pharma-network.com: 
       container_name: peer0.upgrad.pharma-network.com
       extends: 
@@ -175,6 +202,7 @@
         service: peer0.upgrad.pharma-network.com
       networks: 
         - pharma
+
     peer0.vgpharma.pharma-network.com: 
       container_name: peer0.vgpharma.pharma-network.com
       extends: 
@@ -182,6 +210,7 @@
         service: peer0.vgpharma.pharma-network.com
       networks: 
         - pharma
+
     peer1.fedex.pharma-network.com: 
       container_name: peer1.fedex.pharma-network.com
       extends: 
@@ -189,6 +218,7 @@
         service: peer1.fedex.pharma-network.com
       networks: 
         - pharma
+
     peer1.pioneeratlantic.pharma-network.com: 
       container_name: peer1.pioneeratlantic.pharma-network.com
       extends: 
@@ -196,6 +226,7 @@
         service: peer1.pioneearatlantic.pharma-network.com
       networks: 
         - pharma
+
     peer1.sunpharma.pharma-network.com: 
       container_name: peer1.sunpharma.pharma-network.com
       extends: 
@@ -203,6 +234,7 @@
         service: peer1.sunpharma.pharma-network.com
       networks: 
         - pharma
+
     peer1.upgrad.pharma-network.com: 
       container_name: peer1.upgrad.pharma-network.com
       extends: 
@@ -210,6 +242,7 @@
         service: peer1.upgrad.pharma-network.com
       networks: 
         - pharma
+
     peer1.vgpharma.pharma-network.com: 
       container_name: peer1.pharma.vgpharma-network.com
       extends: 
@@ -217,17 +250,6 @@
         service: peer1.vgpharma.pharma-network.com
       networks: 
         - pharma
-  version: "2"
-  volumes: 
-    orderer.pharma-network.com: ~
-    peer0.fedex.pharma-network.com: ~
-    peer0.pioneeratlantic.pharma-network.com: ~
-    peer0.sunpharma.pharma-network.com: ~
-    peer0.upgrad.pharma-network.com: ~
-    peer0.vgpharma.pharma-network.com: ~
-    peer1.fedex.pharma-network.com: ~
-    peer1.pioneeratlantic.pharma-network.com: ~
-    peer1.sunpharma.pharma-network.com: ~
-    peer1.upgrad.pharma-network.com: ~
-    peer1.vgpharma.pharma-network.com: ~
+
+  
   
